@@ -281,11 +281,12 @@ void reset(int board[9][9], int ninjaBoard[9][9]) {
 int main() {
 
 	int keepgoing = 1;
+	int restart;
 
 	printf("\n");
 	
 	printf("===============================\n"
-		   ">> HELLO! WELCOME TO SODOKU! <<!\n"
+		   ">> HELLO! WELCOME TO SUDOKU! <<!\n"
 	       "===============================\n");
 	
 	printf("\n");
