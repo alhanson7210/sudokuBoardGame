@@ -167,7 +167,7 @@ boolean checkGrid(int board[9][9], int row, int col) {
 	int countingArray[9];
         intializeCounterArray(countingArray);
 	for(int r= row; r <= row+2; r++){
-		for(int c= col; r <= col+2; c++){
+		for(int c= col; c <= col+2; c++){
 			int cell = getValueIn(board,r,c);
                         if(cell != 0)
                                 countingArray[cell-1]++;
@@ -178,6 +178,75 @@ boolean checkGrid(int board[9][9], int row, int col) {
                 	return false;
         }
 	return true;
+}
+//makes sure that there is only one of a given value in each of the rows and the columns for a grid
+bool checkGridPattern(int board[9][9], int row, int col, int value){
+	int rowArray[3], colArray[3];
+	//initialize row counter for given value
+	for(int j = 0; j < 3; j++){
+		rowArray[j] = 0;
+		colArray[j] = 0;
+	}
+	//counting the occurences of the value in row
+	for(int r= row; r <= row+2; r++){
+		for(int i = 0; i < 9; i++){
+			if(board[r][col] == value)
+				rowArray[r]++;
+				
+		}
+	}
+	//checking if there is only one occurence of a given value in all rows
+	for(int j = 0; j < 3; j++){
+		if(rowArray[j] > 1)
+			return false;
+	}
+	//counting the occurences of the value in col
+	for(int c= col; c <= col+2; c++){
+		for(int i = 0; i < 9; i++){
+			if(board[row][c] == value)
+				colArray[c]++;
+		}
+	}
+	//checking if there is only one occurence of a given value in all cols
+	for(int j = 0; j < 3; j++){
+		if(colArray[j] > 1)
+			return false;
+	}
+	//one grid check has been successfully made for a given value
+	return true;
+}
+//three checks of grid sized row and columns for a value
+bool checkPattern(int board[9][9], int value) {
+	bool patternCheck;
+	//completes 1st, 2nd, and 3rd grid checks for a given value
+	for(int x = 0; x <= 6; x+=3){
+		patternCheck = checkGridPattern(board,x,x,value);
+		if(!patternCheck)
+			return false;
+	}
+	return patternCheck;
+}
+//checks all grids for duplicates or if the filled board is correct
+boolean modifiedCheckPuzzle(int board[9][9], int ninjaBoard[9][9]){
+        //checking the grid
+        if(!isFull(ninjaBoard)){
+                for(int x = 0; x <= 6; x+3){
+                        for(int y = 0; y <= 6; y+3){
+                                if(checkGrid(board,x,y) == false)
+                                        return false;
+                        }
+                }
+		return true;
+        }
+	else{
+		bool correctBoard;
+		for(int i = 1; i <= 9; i++) {
+			correctBoard = checkPattern(board,i);
+			if(!correctBoard)
+				return false;
+		}
+		return correctBoard;
+	}
 }
 
 boolean checkPuzzle(int board[9][9], int ninjaBoard[9][9]) {
