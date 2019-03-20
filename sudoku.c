@@ -1,16 +1,21 @@
-#include<stdio.h>
-#include<stdlib.h>
-void intitializeBoard(int board[9][9]);
-void start(int board[9][9]);
-void createSudokuPuzzle(int board[9][9], int row, int col);
+#include <stdio.h>
+#include <stdlib.h>
+void intitializeBoard(int board[9][9], int ninjaBoard[9][9]);
+void start(int board[9][9], int ninjaBoard[9][9]);
+void createSudokuPuzzle(int board[9][9], int ninjaBoard[9][9]);
 void display(int board[9][9]);
-addInitialValue(int board[9][9], int row, int col, int value);
-addGuess(int board[9][9], int row, int col, int value);
-boolean checkPuzzle(int board[9][9]);
+void addInitialValue(int board[9][9], int ninjaBoard[9][9], int row, int col, int value);
+void addGuess(int board[9][9], int ninjaBoard[9][9], int row, int col, int value);
+boolean checkPuzzle(int board[9][9], int ninjaBoard[9][9]);
 int getValueIn(int board[9][9], int row, int col);
 int[] getAllowedValues(int board[9][9], int row, int col);
-isFull(int board[9][9], int row, int col);
-void reset(int board[9][9]);
+boolean isFull(int ninjaBoard[9][9]);
+void reset(int board[9][9], int ninjaBoard[9][9]);
+void displaySingleArray(int arr[], int n);
+void initializeCounterArray(int counterArray[9]);
+boolean checkRowAndColumn(int board[9][9], int row, int col, int value);
+boolean checkGrid(int board[9][9], int row, int col);
+void randomizedSudokuPuzzle(int board[9][9], int ninjaBoard[9][9]);
 
 void displaySingleArray(int arr[], int n) {
   for(int i = 0; i < n; i++) {
@@ -34,7 +39,7 @@ void intitializeBoard(int board[9][9], int ninjaBoard[9][9]) {
 
 void start(int board[9][9], int ninjaBoard[9][9]) {
 	intializeBoard(board, ninjaBoard);
-	createSudokuPuzzle(board,ninjaBoard);
+	//createSudokuPuzzle(board,ninjaBoard);
 }
 
 void randomizedSudokuPuzzle(int board[9][9], int ninjaBoard[9][9]) {
