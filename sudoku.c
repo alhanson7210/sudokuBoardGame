@@ -43,37 +43,37 @@ void start(int board[9][9], int ninjaBoard[9][9]) {
 }
 
 void randomizedSudokuPuzzle(int board[9][9], int ninjaBoard[9][9]) {
-	int counter = 36, row = rand() , col = rand(), value = rand(), position;
+	int counter = 36, row = rand() % 9 + 1, col = rand() % 9 + 1, value = rand() % 9 + 1, position;
 	while (counter != 0) {
 		while(row < 1 || row > 9)
-			row = rand();
+			row = rand() % 9 + 1;
 
 		while(col < 1 || col > 9)
-			col = rand();
+			col = rand() % 9 + 1;
 
 		while(value < 1 || value > 9)
-			value = rand();
+			value = rand() % 9 + 1;
 
 		position = getValueIn(ninjaBoard, row, col);
 
 		while(position != 0) {
 			while(row < 1 || row > 9)
-                        	row = rand();
+                        	row = rand() % 9 + 1;
                 	while(col < 1 || col > 9)
-                        	col = rand();
+                        	col = rand() % 9 + 1;
                 	while(value < 1 || value > 9)
-                        	value = rand();
+                        	value = rand() % 9 + 1;
                 	position = getValueIn(ninjaBoard, row, col);
 		}
 
 		while(!checkRowAndColumn(board, row, col, value)){
 			while(position != 0) {
                         	while(row < 1 || row > 9)
-                               		row = rand();
+                               		row = rand() % 9 + 1;
                         	while(col < 1 || col > 9)
-                                	col = rand();
+                                	col = rand() % 9 + 1;
                         	while(value < 1 || value > 9)
-                                	value = rand();
+                                	value = rand() % 9 + 1;
                         	position = getValueIn(ninjaBoard, row, col);
                 	}
 		}
@@ -148,7 +148,8 @@ void createSudokuPuzzle(int board[9][9], int ninjaBoard[9][9]) {
 void display(int board[9][9]) {
 	for(int row = 0; row < 9; row++) {
                 for(int col = 0; col < 9; col++)
-                        printf("%d\t", board[row][col]);
+                        printf("%3d", board[row][col]);
+		printf("\n");
         }
 }
 
@@ -227,7 +228,7 @@ bool checkPattern(int board[9][9], int value) {
 	return patternCheck;
 }
 //checks all grids for duplicates or if the filled board is correct
-boolean modifiedCheckPuzzle(int board[9][9], int ninjaBoard[9][9]){
+bool modifiedCheckPuzzle(int board[9][9], int ninjaBoard[9][9]){
         //checking the grid
         if(!isFull(ninjaBoard)){
                 for(int x = 0; x <= 6; x+3){
@@ -352,6 +353,131 @@ void reset(int board[9][9], int ninjaBoard[9][9]) {
 	intializeBoard(ninjaBoard);
 }
 
+
 int main() {
 
+        int keepgoing = 1;
+        int restart;
+        int board[9][9], ninjaBoard[9][9];
+        bool exit = false;
+        int option;
+
+        printf("\n");
+
+        printf("===============================\n"
+                   ">> HELLO! WELCOME TO SUDOKU! <<\n"
+               "===============================\n");
+
+        printf("\n");
+
+        printf("Your instructions are as follows:\n"
+                "\n"
+                "1 - Each block (3X3) must have the numbers 1-9.\n"
+                "2 - Each row and column must also have the numbers 1-9.\n"
+                "3 - the numbers 1-9 in any block (3x3) or any row or column must not be repeated.\n"
+                "\n"
+                "Begin playing and have fun!\n");
+
+        while(keepgoing == 1){
+                printf("\n");
+                printf("What would you like to do?(1-4):\n"
+                        "1 - Solve the same sudoku game and master it\n"
+                        "2 - Solve a randomized sudoku game and get a new experiance every time\n"
+                        "3 - View the games directions again\n"
+                        "4 - Quit\noption:");
+                scanf("%d", &option);
+                switch(option){
+                        case 1:
+                                exit = false;
+                                start(board, ninjaBoard);
+                                createSudokuPuzzle(board, ninjaBoard);
+                                display(board);
+                                while(!isFull(ninjaBoard) && !modifiedCheckPuzzle(board, ninjaBoard) && exit){
+                                        display(board);
+                                        printf("Enter a row:\n");
+                                        int row;
+                                        scanf("%d", &row);
+                                        printf("Enter a column: \n");
+                                        int col;
+                                        scanf("%d", &col);
+                                        int * allowedvalues;
+                                        allowedvalues = (int *)getAllowedValues(board, row, col);
+                                        printf("Here are the numbers you may choose from: ");
+                                        if(allowedvalues[9] != 0){
+                                                displaySingleArray(allowedvalues, allowedvalues[9]);
+                                                printf("Enter one of the allowed values above: \n");
+                                                int value;
+                                                scanf("%d", &value);
+                                                while(value > 9 && value < 1){
+                                                        printf("Enter a correct value this time: \n");
+                                                        displaySingleArray(allowedvalues, allowedvalues[9]);
+                                                        scanf("%d", &value);
+
+                                                }
+
+                                                addGuess(board, ninjaBoard, row, col, value);
+                                                printf("If you would like to exit enter: 1\n");
+                                                int e;
+                                                scanf("%d", &e);
+                                                if(e == 1)
+                                                        exit = true;
+                                                printf("\n");
+                                        }
+                                }
+                                reset(board, ninjaBoard);
+                                break;
+
+                        case 2:
+                                exit = false;
+                                start(board, ninjaBoard);
+                                randomizedSudokuPuzzle(board, ninjaBoard);
+                                while(!isFull(ninjaBoard) && !modifiedCheckPuzzle(board, ninjaBoard) && exit){
+                                        display(board);
+                                        printf("Enter a row:\n");
+                                        int row;
+                                        scanf("%d", &row);
+                                        printf("Enter a column: \n");
+                                        int col;
+                                        scanf("%d", &col);
+                                        int * allowedvalues;
+                                        allowedvalues = (int *)getAllowedValues(board, row, col);
+                                        printf("Here are the numbers you may choose from: ");
+                                        if(allowedvalues[9] != 0){
+                                                displaySingleArray(allowedvalues, allowedvalues[9]);
+                                                printf("Enter one of the allowed values above: \n");
+                                                int value;
+                                                scanf("%d", &value);
+                                                while(value > 9 && value < 1){
+                                                        printf("Enter a correct value this time: \n");
+                                                        displaySingleArray(allowedvalues, allowedvalues[9]);
+                                                        scanf("%d", &value);
+
+                                                }
+
+                                                addGuess(board, ninjaBoard, row, col, value);
+                                                printf("If you would like to exit enter: 1\n");
+                                                int e;
+                                                scanf("%d", &e);
+                                                if(e == 1)
+                                                        exit = true;
+                                                printf("\n");
+                                        }
+                                }
+                                reset(board, ninjaBoard);
+                                break;
+
+                        case 3:
+                                directions();
+                                break;
+
+                        case 4:
+                                keepgoing = 0;
+                                break;
+
+                }
+        }
 }
+
+
+
+
