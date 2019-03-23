@@ -1,3 +1,4 @@
+//Jake Hanicak
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -174,12 +175,15 @@ bool checkGridPattern(int board[9][9], int row, int col, int value){
                 colArray[j] = 0;
         }
         //counting the occurences of the value in row
+	int z = 0;
         for(int r= row; r <= row+2; r++){
                 for(int i = 0; i < 9; i++){
-                        if(board[r][col] == value)
-                                rowArray[r]++;
+                        if(board[r][i] == value)
+                                rowArray[z]++;
+				
 
                 }
+		z++;
         }
         //checking if there is only one occurence of a given value in all rows
         for(int j = 0; j < 3; j++){
@@ -187,11 +191,13 @@ bool checkGridPattern(int board[9][9], int row, int col, int value){
                         return false;
         }
         //counting the occurences of the value in col
+	z = 0;
         for(int c= col; c <= col+2; c++){
                 for(int i = 0; i < 9; i++){
-                        if(board[row][c] == value)
-                                colArray[c]++;
+                        if(board[i][c] == value)
+                                colArray[z]++;
                 }
+		z++;
         }
         //checking if there is only one occurence of a given value in all cols
         for(int j = 0; j < 3; j++){
@@ -293,7 +299,51 @@ bool checkPuzzle(int board[9][9], int ninjaBoard[9][9]) {
 	}
 	return true;
 }
-
+/*
+bool grid(int board[][], int row, int col, int userRow, int userCol, int value) {
+	int countingArray[9];
+	initializeCounterArray(countingArray);
+	for(int r= row; r <= row+2; r++){
+                for(int c= col; c <= col+2; c++){
+                        int cell = getValueIn(board,r,c);
+                	countingArray[cell-1]++;
+                }
+        }
+	for(int i = 0; i < 9; i++) {
+        	if(countingArray[i] > 1)
+                	return false;
+    	}
+        return true;
+}
+int * checkForCorner(int board[9][9], int row, int col) {
+	int cnr[2];
+	if(row < 3 && col < 3){
+		cnr = {0,0};
+	} else if(row < 3 && col >= 3 && col < 6){
+		cnr = {0,3};
+	} else if(row < 3 && col >= 6){
+		cnr = {0,6};
+        } else if(row >= 3 && row < 6 && col < 3){
+		cnr = {3,0};
+        } else if(row >= 3 && row < 6 && col >= 3 && col < 6){
+		cnr = {3,3};
+        } else if(row >= 3 && row < 6 && col >= 6){
+		cnr = {3,6};
+        } else if(row >= 6) && col < 3{
+		cnr = {6,0};
+        } else if(row >= 6 && col >= 3 && col < 6){
+		cnr = {6,3};
+        } else if(row >= 6 && col >= 6){
+		cnr = {6,6};
+        }
+	int *c = cnr;
+	return c;
+} 
+bool duplicity(int board[9][9], int row, int col, int value) {
+	int *corner = checkForCorner(board, row, col);
+	return grid(board,corner[0],corner[1],row,col, value);
+}
+*/
 int getValueIn(int board[9][9], int row, int col) {
 	return board[row][col];
 }
@@ -355,6 +405,7 @@ int * getAllowedValues(int board[9][9], int row, int col) {
 			counter++;
 		}
 	}
+	//bool checkForDuplicatesInGrid = duplicity
 	temp[9] = counter; // last one will always be the size of the temp array, make its easier to manipulate
 	return temp;
 }
@@ -376,13 +427,113 @@ void reset(int board[9][9], int ninjaBoard[9][9]) {
 void directions(){
 		printf("Your instructions are as follows:\n"
 		"\n"
+		"This is a classic take on sudoku"
 		"1 - Each block (3X3) must have the numbers 1-9.\n"
 		"2 - Each row and column must also have the numbers 1-9.\n"
 		"3 - the numbers 1-9 in any block (3x3) or any row or column must not be repeated.\n"
 		"\n"
 		"Begin playing and have fun!\n");
 }
+/*
+bool boardComparedToBoard(){
 
+}*/
+void createCorrectPuzzle(int boardd[9][9], int ninjaBoard[9][9]) {
+	for(int row = 0; row < 9; row++) {
+                for(int col = 0; col < 9; col++) {
+                        boardd[row][col] = 0;
+                }
+        }
+	addInitialValue(boardd, ninjaBoard, 0, 1, 6);
+    	addInitialValue(boardd, ninjaBoard, 0, 2, 8);
+        addInitialValue(boardd, ninjaBoard, 0, 6, 9);
+        addInitialValue(boardd, ninjaBoard, 0, 7, 3);
+	addInitialValue(boardd, ninjaBoard, 0, 0, 5);
+	addInitialValue(boardd, ninjaBoard, 0, 3, 7);
+	addInitialValue(boardd, ninjaBoard, 0, 4, 2);
+	addInitialValue(boardd, ninjaBoard, 0, 5, 4);
+	addInitialValue(boardd, ninjaBoard, 0, 8, 1);
+
+        addInitialValue(boardd, ninjaBoard, 1, 1, 4);
+	addInitialValue(boardd, ninjaBoard, 1, 0, 3);
+	addInitialValue(boardd, ninjaBoard, 1, 3, 5);
+	addInitialValue(boardd, ninjaBoard, 1, 4, 1);
+	addInitialValue(boardd, ninjaBoard, 1, 5, 9);
+	addInitialValue(boardd, ninjaBoard, 1, 7, 7);
+        addInitialValue(boardd, ninjaBoard, 1, 2, 2);
+    	addInitialValue(boardd, ninjaBoard, 1, 6, 6);
+	addInitialValue(boardd, ninjaBoard, 1, 8, 8);
+	
+    	addInitialValue(boardd, ninjaBoard, 2, 0, 1);
+    	addInitialValue(boardd, ninjaBoard, 2, 1, 9);
+    	addInitialValue(boardd, ninjaBoard, 2, 4, 8);
+    	addInitialValue(boardd, ninjaBoard, 2, 7, 4);
+    	addInitialValue(boardd, ninjaBoard, 3, 1, 8);
+	addInitialValue(boardd, ninjaBoard, 2, 2, 7);
+	addInitialValue(boardd, ninjaBoard, 2, 3, 3);
+	addInitialValue(boardd, ninjaBoard, 2, 5, 6);
+	//addInitialValue(boardd, ninjaBoard, 2, 7, 2);
+	addInitialValue(boardd, ninjaBoard, 2, 8, 5);
+	addInitialValue(boardd, ninjaBoard, 2, 6, 2);
+	addInitialValue(boardd, ninjaBoard, 3, 0, 6);
+	addInitialValue(boardd, ninjaBoard, 3, 4, 3);
+	addInitialValue(boardd, ninjaBoard, 3, 6, 4);
+	addInitialValue(boardd, ninjaBoard, 3, 7, 9);
+	addInitialValue(boardd, ninjaBoard, 4, 1, 3);
+	addInitialValue(boardd, ninjaBoard, 4, 2, 4);
+	addInitialValue(boardd, ninjaBoard, 4, 5, 5);
+	addInitialValue(boardd, ninjaBoard, 4, 6, 1);
+	addInitialValue(boardd, ninjaBoard, 4, 7, 2);
+	addInitialValue(boardd, ninjaBoard, 4, 8, 6);
+	addInitialValue(boardd, ninjaBoard, 5, 1, 1);
+	addInitialValue(boardd, ninjaBoard, 5, 3, 4);
+	addInitialValue(boardd, ninjaBoard, 5, 4, 6);
+	addInitialValue(boardd, ninjaBoard, 5, 7, 8);
+	addInitialValue(boardd, ninjaBoard, 6, 0, 9);
+	addInitialValue(boardd, ninjaBoard, 6, 2, 6);
+	addInitialValue(boardd, ninjaBoard, 6, 4, 7);
+	addInitialValue(boardd, ninjaBoard, 6, 5, 8);
+	addInitialValue(boardd, ninjaBoard, 6, 6, 3);
+	addInitialValue(boardd, ninjaBoard, 6, 8, 4);
+	addInitialValue(boardd, ninjaBoard, 7, 2, 1);
+	addInitialValue(boardd, ninjaBoard, 8, 3, 6);
+	addInitialValue(boardd, ninjaBoard, 7, 3, 9);
+	addInitialValue(boardd, ninjaBoard, 7, 5, 3);
+	addInitialValue(boardd, ninjaBoard, 7, 8, 2);
+	addInitialValue(boardd, ninjaBoard, 8, 6, 8);
+	addInitialValue(boardd, ninjaBoard, 8, 7, 1);
+
+    	addInitialValue(boardd, ninjaBoard, 3, 2, 5);
+    	addInitialValue(boardd, ninjaBoard, 3, 3, 2);
+    	addInitialValue(boardd, ninjaBoard, 3, 5, 1);
+    	addInitialValue(boardd, ninjaBoard, 3, 8, 7);
+    	addInitialValue(boardd, ninjaBoard, 4, 0, 7);
+    	addInitialValue(boardd, ninjaBoard, 4, 3, 8);
+
+    	addInitialValue(boardd, ninjaBoard, 4, 4, 9);
+    	addInitialValue(boardd, ninjaBoard, 5, 0, 2);
+    	addInitialValue(boardd, ninjaBoard, 5, 2, 9);
+    	addInitialValue(boardd, ninjaBoard, 5, 5, 7);
+    	addInitialValue(boardd, ninjaBoard, 5, 6, 5);
+    	addInitialValue(boardd, ninjaBoard, 5, 8, 3);
+
+    	addInitialValue(boardd, ninjaBoard, 6, 1, 2);
+    	addInitialValue(boardd, ninjaBoard, 6, 3, 1);
+    	addInitialValue(boardd, ninjaBoard, 6, 7, 5);
+    	addInitialValue(boardd, ninjaBoard, 7, 0, 8);
+    	addInitialValue(boardd, ninjaBoard, 7, 1, 5);
+    	addInitialValue(boardd, ninjaBoard, 7, 4, 4);
+
+    	addInitialValue(boardd, ninjaBoard, 7, 6, 7);
+    	addInitialValue(boardd, ninjaBoard, 7, 7, 6);
+    	addInitialValue(boardd, ninjaBoard, 8, 0, 4);
+    	addInitialValue(boardd, ninjaBoard, 8, 1, 7);
+    	addInitialValue(boardd, ninjaBoard, 8, 2, 3);
+    	addInitialValue(boardd, ninjaBoard, 8, 4, 5);
+
+    	addInitialValue(boardd, ninjaBoard, 8, 5, 2);
+    	addInitialValue(boardd, ninjaBoard, 8, 8, 9);
+}
 int main() {
 
 	int keepgoing = 1;
@@ -425,16 +576,24 @@ int main() {
 					display(board);
 					printf("Enter a row:\n");
 					int row;
-					scanf("%d", &row); 
+					scanf("%d", &row);
+					while(row < 0 || row > 8){
+						printf("Please enter a correct row(0-8):\n");
+						scanf("%d", &row); 
+					} 
 					printf("Enter a column: \n");
 					int col;
-					scanf("%d", &col); 
+					scanf("%d", &col);
+					while(col < 0 || col > 8){
+                                                printf("Please enter a correct column(0-8):\n");
+                                                scanf("%d", &col); 
+                                        } 
 					int * allowedvalues;
 					allowedvalues = (int *)getAllowedValues(board, row, col);
-					printf("Here are the numbers you may choose from: ");
+					printf("Here are suggested values: ");
 					if(allowedvalues[9] != 0){
 						displaySingleArray(allowedvalues, allowedvalues[9]); 
-						printf("Enter one of the allowed values above: \n");
+						printf("Enter one of the suggested values above or change the value in the cell:");
 						int value;
 						scanf("%d", &value);
 						while(value > 9 && value < 1){
@@ -445,7 +604,84 @@ int main() {
 						}
 						
 						addGuess(board, ninjaBoard, row, col, value);
-						printf("If you would like to exit enter: 1\n");
+						printf("If you would like to exit, enter 1; if you would like to reset the board, enter -1; enter 0 to continue:");
+						int e;
+						scanf("%d", &e);
+						if(e == 1)
+							exit = false;
+						else if(e == -1){
+							reset(board,ninjaBoard);
+							createSudokuPuzzle(board, ninjaBoard);
+						}
+						printf("\n");
+					}
+				}
+				display(board);
+				modifiedCheckPuzzle(board,ninjaBoard)? printf("The board was correctly solved!\n") : printf("The board was not correctly solved.\n");
+				/*
+				int correct[9][9];
+				createCorrectPuzzle(correct, ninjaBoard);
+				int sumBoard = 0, sumCorrect = 0;
+				for(int j = 0; j < 9; j++){
+                                        for(int i = 0; i < 9; i++)
+						sumBoard += board[i][j];
+				}
+				for(int j = 0; j < 9; j++){
+                                        for(int i = 0; i < 9; i++)
+						sumCorrect += correct[i][j];
+				}
+				sumBoard == sumCorrect? printf("The board was correctly solved!\n") : printf("The board was not correctly solved.\n");
+				
+				bool cor=true;
+				for(int j = 0; j < 9; j++){
+					for(int i = 0; i < 9; i++){
+						if(board[i][j] != correct[i][j]){
+							cor=false;
+							break;
+						}
+					}
+				}
+				cor == false? printf("The board was not correctly solved\n"):printf("The board was correctly solved!\n");*/
+				reset(board, ninjaBoard);
+				break;
+
+			case 2:
+				exit = true;
+				start(board, ninjaBoard);
+				randomizedSudokuPuzzle(board, ninjaBoard);
+				while(!isFull(ninjaBoard) && exit){
+					display(board);
+					printf("Enter a row:\n");
+					int row;
+					scanf("%d", &row);
+					while(row < 0 || row > 8){
+                                                printf("Please enter a correct row(0-8):\n");
+                                                scanf("%d", &row);
+                                        } 
+					printf("Enter a column: \n");
+					int col;
+					scanf("%d", &col);
+					while(col < 0 || col > 8){
+                                                printf("Please enter a correct column(0-8):\n");
+                                                scanf("%d", &col);
+                                        } 
+					int * allowedvalues;
+					allowedvalues = (int *)getAllowedValues(board, row, col);
+					printf("Here are suggested values: ");
+					if(allowedvalues[9] != 0){
+						displaySingleArray(allowedvalues, allowedvalues[9]); 
+						printf("Enter one of the suggested values above or change the value in the cell:");
+						int value;
+						scanf("%d", &value);
+						while(value > 9 && value < 1){
+							printf("Enter a correct value this time: \n");
+							displaySingleArray(allowedvalues, allowedvalues[9]);
+							scanf("%d", &value);
+
+						}
+						
+						addGuess(board, ninjaBoard, row, col, value);
+						printf("If you would like to exit enter 1 or 0 to continue:");
 						int e;
 						scanf("%d", &e);
 						if(e == 1)
@@ -453,46 +689,10 @@ int main() {
 						printf("\n");
 					}
 				}
-				modifiedCheckPuzzle(board, ninjaBoard);
-				reset(board, ninjaBoard);
-				break;
-
-			case 2:
-				exit = false;
-				start(board, ninjaBoard);
-				randomizedSudokuPuzzle(board, ninjaBoard);
-				while(!isFull(ninjaBoard) && !modifiedCheckPuzzle(board, ninjaBoard) && exit){
-					display(board);
-					printf("Enter a row:\n");
-					int row;
-					scanf("%d", &row); 
-					printf("Enter a column: \n");
-					int col;
-					scanf("%d", &col); 
-					int * allowedvalues;
-					allowedvalues = (int *)getAllowedValues(board, row, col);
-					printf("Here are the numbers you may choose from: ");
-					if(allowedvalues[9] != 0){
-						displaySingleArray(allowedvalues, allowedvalues[9]); 
-						printf("Enter one of the allowed values above: \n");
-						int value;
-						scanf("%d", &value);
-						while(value > 9 && value < 1){
-							printf("Enter a correct value this time: \n");
-							displaySingleArray(allowedvalues, allowedvalues[9]);
-							scanf("%d", &value);
-
-						}
-						
-						addGuess(board, ninjaBoard, row, col, value);
-						printf("If you would like to exit enter: 1\n");
-						int e;
-						scanf("%d", &e);
-						if(e == 1)
-							exit = true;
-						printf("\n");
-					}
-				}
+				if(modifiedCheckPuzzle(board, ninjaBoard))
+                                        printf("The board was correctly solved!\n");
+                                else
+                                        printf("The board was not correctly solved\n");
 				reset(board, ninjaBoard);
 				break;
 
